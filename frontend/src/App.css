@@ -1,0 +1,79 @@
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.game-card {
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.game-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.puzzle-card {
+  margin-bottom: 16px;
+}
+
+.puzzle-card .ant-card-head {
+  padding: 0 16px;
+}
+
+.puzzle-difficulty {
+  display: inline-flex;
+  margin-left: 8px;
+}
+
+.hint-item {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.hint-item:last-child {
+  border-bottom: none;
+}
+
+.maintenance-item {
+  padding: 8px 0;
+}
+
+.stat-card {
+  text-align: center;
+}
+
+.stat-card .ant-statistic-title {
+  font-size: 16px;
+}
+
+.form-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 576px) {
+  .site-layout-content {
+    padding: 12px;
+  }
+  
+  .ant-layout-content {
+    padding: 0 12px !important;
+  }
+} 
