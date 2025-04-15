@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         setAuthToken(token);
         try {
-          const res = await axios.get(`${config.API_URL}/api/auth/me`);
+          const res = await axios.get('/api/auth/me');
           setUser(res.data.user);
           
           // Make sure workspaces is always an array
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       setLoading(true);
-      const res = await axios.post(`${config.API_URL}/api/auth/register`, formData);
+      const res = await axios.post('/api/auth/register', formData);
       
       // Store token and set axios header
       localStorage.setItem('token', res.data.token);
@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (formData) => {
     try {
       setLoading(true);
-      const res = await axios.post(`${config.API_URL}/api/auth/login`, formData);
+      const res = await axios.post('/api/auth/login', formData);
       
       // Store token and set axios header
       localStorage.setItem('token', res.data.token);
