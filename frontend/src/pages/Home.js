@@ -4,7 +4,7 @@ import { Row, Col, Card, Statistic, Table, Typography, Spin, Alert, Button } fro
 import { AppstoreOutlined, BlockOutlined, BulbOutlined, ToolOutlined, ReloadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import config from './config';
+import config from '../config';
 
 const { Title } = Typography;
 

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Form, Input, Button, Select, Slider, Typography, message, Card, Spin } from 'antd';
 import MultipleImageUploader from '../components/MultipleImageUploader';
 import axios from 'axios';
-import config from './config';
+import config from '../config';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -44,7 +44,7 @@ const AddPuzzle = () => {
       console.log('Direct uploadedImages state:', uploadedImages);
       
       // Step 1: Create the puzzle first
-      const puzzleResponse = await axios.post(`${config.API_URL}/api/puzzles', {
+      const puzzleResponse = await axios.post(`${config.API_URL}/api/puzzles`, {
         title: values.title,
         description: values.description,
         status: values.status,
@@ -73,7 +73,7 @@ const AddPuzzle = () => {
           
           if (processedImages.length > 0) {
             // Make the API call to associate images and wait for it to complete
-            const imageResponse = await axios.post(`${config.API_URL}/api/puzzle-images', {
+            const imageResponse = await axios.post(`${config.API_URL}/api/puzzle-images`, {
               puzzleId: newPuzzleId,
               images: processedImages
             });

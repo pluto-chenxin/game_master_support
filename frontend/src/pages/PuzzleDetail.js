@@ -16,7 +16,7 @@ import axios from 'axios';
 import moment from 'moment';
 import ReportList from '../components/ReportList';
 import ReportForm from '../components/ReportForm';
-import config from './config';
+import config from '../config';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;

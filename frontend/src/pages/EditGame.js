@@ -6,7 +6,7 @@ import moment from 'moment';
 import { useAuth } from '../context/AuthContext';
 import { EditOutlined, ArrowLeftOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import SingleImageUploader from '../components/SingleImageUploader';
-import config from './config';
+import config from '../config';
 
 const { Title } = Typography;
 const { TextArea } = Input;

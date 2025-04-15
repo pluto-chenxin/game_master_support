@@ -6,7 +6,7 @@ import axios from 'axios';
 import './GameDetail.css';
 import ReportList from '../components/ReportList';
 import ReportForm from '../components/ReportForm';
-import config from './config';
+import config from '../config';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
