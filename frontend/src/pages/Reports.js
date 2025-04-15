@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ReportList from '../components/ReportList';
 import ReportForm from '../components/ReportForm';
 import { useAuth } from '../context/AuthContext';
+import config from './config';
 
 const { TabPane } = Tabs;
 const { Option } = Select;

@@ -13,6 +13,7 @@ import {
 } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
+import config from '../config';
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -33,7 +34,7 @@ const ReportStats = ({ gameId, workspaceId }) => {
       setLoading(true);
       
       // Construct URL with query parameters
-      let url = 'http://localhost:5000/api/reports/stats';
+      let url = `${config.API_URL}/api/reports/stats`;
       const params = new URLSearchParams();
       
       if (timeRange !== 'custom') {

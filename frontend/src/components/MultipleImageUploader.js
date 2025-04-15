@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Modal, Button, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import config from '../config';
 
 const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -17,7 +18,7 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
         uid: img.id || `-${index}`,
         name: img.caption || `Image ${index + 1}`,
         status: 'done',
-        url: `http://localhost:5000${img.imageUrl}`,
+        url: `${config.API_URL}${img.imageUrl}`,
         imageUrl: img.imageUrl,
         isPrimary: img.isPrimary
       }));
@@ -86,14 +87,14 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
         }
       };
       
-      const response = await axios.post('http://localhost:5000/api/uploads', formData, config);
+      const response = await axios.post('/api/uploads', formData, config);
       console.log('Upload response:', response.data);
       
       // Create a unique response object with full path
       const responseWithPath = {
         ...response.data,
         uniqueId: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
-        fullUrl: `http://localhost:5000${response.data.filePath}`
+        fullUrl: `${config.API_URL}${response.data.filePath}`
       };
       
       // Explicitly mark the file as done
@@ -110,7 +111,7 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
       if (puzzleId) {
         try {
           console.log(`Associating image ${file.name} with puzzle ID ${puzzleId}`);
-          const puzzleImageResponse = await axios.post('http://localhost:5000/api/puzzle-images', {
+          const puzzleImageResponse = await axios.post('/api/puzzle-images', {
             puzzleId,
             images: [{
               imageUrl: response.data.filePath,
@@ -188,7 +189,7 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
         const formData = new FormData();
         formData.append('image', file);
         
-        return axios.post('http://localhost:5000/api/uploads', formData, {
+        return axios.post('/api/uploads', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -203,7 +204,7 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
         name: files[index].name,
         status: 'done',
         response: response.data,
-        url: `http://localhost:5000${response.data.filePath}`,
+        url: `${config.API_URL}${response.data.filePath}`,
       }));
       
       // Update fileList and trigger onChange
@@ -248,8 +249,8 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
         uid: file.uid,
         name: file.name,
         status: 'done',
-        url: `http://localhost:5000${file.response.filePath}`,
-        thumbUrl: `http://localhost:5000${file.response.filePath}`,
+        url: `${config.API_URL}${file.response.filePath}`,
+        thumbUrl: `${config.API_URL}${file.response.filePath}`,
         response: file.response,
         imageUrl: file.response.filePath
       };
@@ -340,10 +341,10 @@ const MultipleImageUploader = ({ value = [], onChange, puzzleId }) => {
               return {
                 ...file,
                 status: file.response ? 'done' : file.status,
-                url: file.url || (file.response && `http://localhost:5000${file.response.filePath}`),
-                thumbUrl: file.thumbUrl || (file.response && `http://localhost:5000${file.response.filePath}`),
+                url: file.url || (file.response && `${config.API_URL}${file.response.filePath}`),
+                thumbUrl: file.thumbUrl || (file.response && `${config.API_URL}${file.response.filePath}`),
                 // Add a preview property for better image display
-                preview: file.url || (file.response && `http://localhost:5000${file.response.filePath}`)
+                preview: file.url || (file.response && `${config.API_URL}${file.response.filePath}`)
               };
             })}
             onPreview={handlePreview}

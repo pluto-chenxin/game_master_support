@@ -3,6 +3,7 @@ import { Card, Typography, Tabs, Select, Spin } from 'antd';
 import ReportStats from '../components/ReportStats';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import config from './config';
 
 const { Title } = Typography;
 const { TabPane } = Tabs;

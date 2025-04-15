@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import axios from 'axios';
+import config from './config';
 
 // Set default base URL for API requests
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = config.API_URL;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

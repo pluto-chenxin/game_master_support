@@ -16,6 +16,7 @@ import axios from 'axios';
 import moment from 'moment';
 import ReportList from '../components/ReportList';
 import ReportForm from '../components/ReportForm';
+import config from './config';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -511,7 +512,7 @@ const PuzzleDetail = () => {
                     <div key={index}>
                       <div style={{ textAlign: 'center', position: 'relative', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img 
-                          src={`http://localhost:5000${image.imageUrl}`} 
+                          src={`${config.API_URL}${image.imageUrl}`} 
                           alt={`Puzzle image ${index + 1}`}
                           style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }}
                           onError={(e) => {
@@ -546,7 +547,7 @@ const PuzzleDetail = () => {
                       <div style={{ height: 100, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
                         <img 
                           alt={`Thumbnail ${index + 1}`} 
-                          src={`http://localhost:5000${image.imageUrl}`}
+                          src={`${config.API_URL}${image.imageUrl}`}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           onError={(e) => {
                             e.target.src = 'https://via.placeholder.com/100x100?text=Image+Not+Found';

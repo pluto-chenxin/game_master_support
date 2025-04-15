@@ -17,6 +17,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router-dom';
 import debounce from 'lodash/debounce';
+import config from '../config';
 
 const { Text, Title, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -30,7 +31,7 @@ const ReportItem = ({ report, onEdit, onDelete, showGameInfo, showPuzzleInfo }) 
   useEffect(() => {
     const fetchReportDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/reports/${report.id}?_=${Date.now()}`);
+        const response = await axios.get(`${config.API_URL}/api/reports/${report.id}?_=${Date.now()}`);
         setReportData(response.data);
       } catch (err) {
         console.error(`Error fetching report ${report.id} details:`, err);
@@ -110,7 +111,7 @@ const ReportItem = ({ report, onEdit, onDelete, showGameInfo, showPuzzleInfo }) 
                     }}
                   >
                     <img
-                      src={`http://localhost:5000${encodeURI(image.imageUrl)}`}
+                      src={`${config.API_URL}${encodeURI(image.imageUrl)}`}
                       alt={`${reportData.title} - Image ${index + 1}`}
                       style={{ 
                         maxWidth: '25%', 
@@ -381,11 +382,11 @@ const ReportList = ({
       let url;
       
       if (puzzleId) {
-        url = `http://localhost:5000/api/reports/puzzle/${puzzleId}`;
+        url = `${config.API_URL}/api/reports/puzzle/${puzzleId}`;
       } else if (gameId) {
-        url = `http://localhost:5000/api/reports/game/${gameId}`;
+        url = `${config.API_URL}/api/reports/game/${gameId}`;
       } else {
-        url = 'http://localhost:5000/api/reports';
+        url = `${config.API_URL}/api/reports`;
       }
       
       // Build query parameters
@@ -454,7 +455,7 @@ const ReportList = ({
         imageUrls: imageUrls
       };
       
-      const response = await axios.put(`http://localhost:5000/api/reports/${currentReport.id}`, updateData);
+      const response = await axios.put(`${config.API_URL}/api/reports/${currentReport.id}`, updateData);
       
       // Close the modal first
       setEditModalVisible(false);
@@ -473,7 +474,7 @@ const ReportList = ({
 
   const handleDelete = async (reportId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/reports/${reportId}`);
+      await axios.delete(`${config.API_URL}/api/reports/${reportId}`);
       // Remove the deleted report from the list
       setReports(prevReports => prevReports.filter(report => report.id !== reportId));
     } catch (err) {
@@ -484,7 +485,7 @@ const ReportList = ({
 
   const uploadProps = {
     name: 'image',
-    action: 'http://localhost:5000/api/uploads',
+    action: `${config.API_URL}/api/uploads`,
     headers: {
       authorization: 'authorization-text',
     },
@@ -728,7 +729,7 @@ const ReportList = ({
                         }}
                       >
                         <img 
-                          src={`http://localhost:5000${encodeURI(url)}`}
+                          src={`${config.API_URL}${encodeURI(url)}`}
                           alt={`Image ${index + 1}`}
                           style={{ maxWidth: '120px', maxHeight: '120px', objectFit: 'contain' }}
                         />

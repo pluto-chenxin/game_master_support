@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Upload, Button, message } from 'antd';
 import { UploadOutlined, LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import config from '../config';
 
 const ImageUploader = ({ value, onChange }) => {
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ const ImageUploader = ({ value, onChange }) => {
       const formData = new FormData();
       formData.append('image', file);
       
-      const response = await axios.post('http://localhost:5000/api/uploads', formData, {
+      const response = await axios.post('/api/uploads', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -82,7 +83,7 @@ const ImageUploader = ({ value, onChange }) => {
     >
       {imageUrl ? (
         <img 
-          src={`http://localhost:5000${imageUrl}`} 
+          src={`${config.API_URL}${imageUrl}`} 
           alt="puzzle" 
           style={{ width: '100%' }} 
         />

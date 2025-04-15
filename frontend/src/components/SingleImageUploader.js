@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Modal, message, Button } from 'antd';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import config from '../config';
 
 const SingleImageUploader = ({ value, onChange }) => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ const SingleImageUploader = ({ value, onChange }) => {
       // Otherwise, it's a path from our backend
       const fullUrl = value.startsWith('http') 
         ? value 
-        : `http://localhost:5000${value}`;
+        : `${config.API_URL}${value}`;
       setImageUrl(fullUrl);
     }
   }, [value]);
@@ -59,10 +60,10 @@ const SingleImageUploader = ({ value, onChange }) => {
         }
       };
       
-      const response = await axios.post('http://localhost:5000/api/uploads', formData, config);
+      const response = await axios.post('/api/uploads', formData, config);
       
       // Update component state
-      const fullUrl = `http://localhost:5000${response.data.filePath}`;
+      const fullUrl = `${config.API_URL}${response.data.filePath}`;
       setImageUrl(fullUrl);
       
       // Call onChange with just the path

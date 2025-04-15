@@ -3,6 +3,7 @@ import { Form, Input, DatePicker, Select, Button, Spin, Alert, Upload, message, 
 import { UploadOutlined, DeleteOutlined, PictureOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
+import config from '../config';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -25,7 +26,7 @@ const ReportForm = ({ gameId, puzzleId, onFinish }) => {
     const fetchPuzzles = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/games/${gameId}/puzzles`);
+        const response = await axios.get(`${config.API_URL}/api/games/${gameId}/puzzles`);
         setPuzzles(response.data);
         setLoading(false);
       } catch (err) {
@@ -64,7 +65,7 @@ const ReportForm = ({ gameId, puzzleId, onFinish }) => {
 
       console.log('Submitting report:', reportData);
       
-      const response = await axios.post('http://localhost:5000/api/reports', reportData);
+      const response = await axios.post(`${config.API_URL}/api/reports`, reportData);
       
       // Clear the form
       form.resetFields();
@@ -87,7 +88,7 @@ const ReportForm = ({ gameId, puzzleId, onFinish }) => {
 
   const uploadProps = {
     name: 'image',
-    action: 'http://localhost:5000/api/uploads',
+    action: `${config.API_URL}/api/uploads`,
     headers: {
       authorization: 'authorization-text',
     },
@@ -242,7 +243,7 @@ const ReportForm = ({ gameId, puzzleId, onFinish }) => {
                     }}
                   >
                     <img 
-                      src={`http://localhost:5000${url}`} 
+                      src={`${config.API_URL}${url}`} 
                       alt={`Image ${index + 1}`}
                       style={{ maxWidth: '150px', maxHeight: '150px' }} 
                     />

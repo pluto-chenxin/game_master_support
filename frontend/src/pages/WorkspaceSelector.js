@@ -10,6 +10,7 @@ import {
 import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import config from '../config';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -44,7 +45,7 @@ const WorkspaceSelector = () => {
   const handleCreateWorkspace = async (values) => {
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/workspaces', values);
+      const res = await axios.post(`${config.API_URL}/api/workspaces`, values);
       
       // Reload the page to refresh workspaces
       window.location.reload();

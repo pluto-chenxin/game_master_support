@@ -6,6 +6,7 @@ import moment from 'moment';
 import { useAuth } from '../context/AuthContext';
 import { PlusOutlined } from '@ant-design/icons';
 import SingleImageUploader from '../components/SingleImageUploader';
+import config from './config';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -51,7 +52,7 @@ const AddGame = () => {
       };
 
       // Submit the data
-      const response = await axios.post('http://localhost:5000/api/games', formattedValues);
+      const response = await axios.post(`${config.API_URL}/api/games', formattedValues);
       
       message.success('Game added successfully!');
       navigate(`/games/${response.data.id}`);
