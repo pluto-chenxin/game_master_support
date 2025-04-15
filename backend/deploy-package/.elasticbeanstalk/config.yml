@@ -1,5 +1,0 @@
-branch-defaults:
-  default:
-    environment: game-master-env
-global:
-  profile: null
