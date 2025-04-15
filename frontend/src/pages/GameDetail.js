@@ -41,11 +41,11 @@ const GameDetail = () => {
         setLoading(true);
         
         // Fetch game details
-        const gameResponse = await axios.get(`http://localhost:5000/api/games/${id}`);
+        const gameResponse = await axios.get(`${config.API_URL}/api/games/${id}`);
         setGame(gameResponse.data);
         
         // Fetch puzzles for this game
-        const puzzlesResponse = await axios.get(`http://localhost:5000/api/games/${id}/puzzles`);
+        const puzzlesResponse = await axios.get(`${config.API_URL}/api/games/${id}/puzzles`);
         setPuzzles(puzzlesResponse.data);
         
         setLoading(false);
@@ -61,7 +61,7 @@ const GameDetail = () => {
 
   const handleDeleteGame = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/games/${id}`);
+      await axios.delete(`${config.API_URL}/api/games/${id}`);
       message.success('Game deleted successfully');
       navigate('/games');
     } catch (error) {

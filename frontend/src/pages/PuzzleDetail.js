@@ -70,7 +70,7 @@ const PuzzleDetail = () => {
   const fetchPuzzleImages = React.useCallback(async () => {
     try {
       console.log(`Fetching images for puzzle ${id} at ${new Date().toISOString()}`);
-      const imagesResponse = await axios.get(`http://localhost:5000/api/puzzle-images/puzzle/${id}?_t=${Date.now()}`);
+      const imagesResponse = await axios.get(`${config.API_URL}/api/puzzle-images/puzzle/${id}?_t=${Date.now()}`);
       const images = imagesResponse.data;
       
       console.log('Fetched puzzle images:', images);
@@ -103,7 +103,7 @@ const PuzzleDetail = () => {
         console.log('Fetching puzzle details for ID:', id);
         
         // Fetch puzzle details
-        const puzzleResponse = await axios.get(`http://localhost:5000/api/puzzles/${id}`);
+        const puzzleResponse = await axios.get(`${config.API_URL}/api/puzzles/${id}`);
         const puzzleData = puzzleResponse.data;
         
         if (!isMounted) return;
@@ -180,7 +180,7 @@ const PuzzleDetail = () => {
   const handlePuzzleUpdate = async (values) => {
     try {
       setEditLoading(true);
-      await axios.put(`http://localhost:5000/api/puzzles/${id}`, values);
+      await axios.put(`${config.API_URL}/api/puzzles/${id}`, values);
       
       // Update local state
       setPuzzle({
@@ -200,7 +200,7 @@ const PuzzleDetail = () => {
 
   const handlePuzzleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/puzzles/${id}`);
+      await axios.delete(`${config.API_URL}/api/puzzles/${id}`);
       message.success('Puzzle deleted successfully');
       navigate(`/games/${puzzle.gameId}`);
     } catch (error) {
@@ -222,7 +222,7 @@ const PuzzleDetail = () => {
         puzzleId: parseInt(id)
       };
       
-      const response = await axios.post(`http://localhost:5000/api/hints`, hintData);
+      const response = await axios.post(`${config.API_URL}/api/hints`, hintData);
       
       // Update local state
       setPuzzle({
@@ -242,7 +242,7 @@ const PuzzleDetail = () => {
 
   const handleDeleteHint = async (hintId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/hints/${hintId}`);
+      await axios.delete(`${config.API_URL}/api/hints/${hintId}`);
       
       // Update local state
       setPuzzle({
@@ -275,7 +275,7 @@ const PuzzleDetail = () => {
         puzzleId: parseInt(id)
       };
       
-      const response = await axios.post(`http://localhost:5000/api/maintenance`, maintenanceData);
+      const response = await axios.post(`${config.API_URL}/api/maintenance`, maintenanceData);
       
       // Update local state
       setPuzzle({
@@ -295,7 +295,7 @@ const PuzzleDetail = () => {
 
   const handleDeleteMaintenance = async (maintenanceId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/maintenance/${maintenanceId}`);
+      await axios.delete(`${config.API_URL}/api/maintenance/${maintenanceId}`);
       
       // Update local state
       setPuzzle({
@@ -313,7 +313,7 @@ const PuzzleDetail = () => {
   const toggleHintUsed = async (hint) => {
     try {
       const updatedHint = { ...hint, isUsed: !hint.isUsed };
-      await axios.put(`http://localhost:5000/api/hints/${hint.id}`, updatedHint);
+      await axios.put(`${config.API_URL}/api/hints/${hint.id}`, updatedHint);
       
       // Update local state
       setPuzzle({
@@ -371,7 +371,7 @@ const PuzzleDetail = () => {
       onOk: async () => {
         try {
           console.log('Deleting image with ID:', imageId);
-          await axios.delete(`http://localhost:5000/api/puzzle-images/${imageId}`);
+          await axios.delete(`${config.API_URL}/api/puzzle-images/${imageId}`);
           
           // Update the images list with immediate UI update
           setPuzzleImages(prev => prev.filter(img => img.id !== imageId));
@@ -389,7 +389,7 @@ const PuzzleDetail = () => {
 
   const handleSetPrimaryImage = (imageId) => {
     console.log('Setting primary image ID:', imageId);
-    axios.put(`http://localhost:5000/api/puzzle-images/${imageId}`, { isPrimary: true })
+    axios.put(`${config.API_URL}/api/puzzle-images/${imageId}`, { isPrimary: true })
       .then(() => {
         // Immediate UI update
         setPuzzleImages(prev => prev.map(img => ({

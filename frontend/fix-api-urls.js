@@ -23,8 +23,9 @@ const findAndReplace = async (filePath) => {
 
     // Import the config if it's not already imported and the file contains the localhost URL
     let newData = data;
-    if (data.includes('http://localhost:5000') && !data.includes("import config from './config'") && !data.includes("import config from '../config'")) {
-      const lines = data.split('\n');
+    
+    if (newData.includes('http://localhost:5000') && !newData.includes("import config from './config'") && !newData.includes("import config from '../config'")) {
+      const lines = newData.split('\n');
       let insertIndex = 0;
       
       // Find a good place to insert the import
@@ -41,28 +42,37 @@ const findAndReplace = async (filePath) => {
       
       // Determine the correct import path
       const importPath = filePath.includes('/src/components/') || 
-                         filePath.includes('/src/pages/') || 
-                         filePath.includes('/src/context/') ? 
-                         '../config' : './config';
-                         
+                        filePath.includes('/src/pages/') || 
+                        filePath.includes('/src/context/') ? 
+                        '../config' : './config';
+                        
       lines.splice(insertIndex, 0, `import config from '${importPath}';`);
       newData = lines.join('\n');
       modified = true;
     }
 
-    // Replace direct API URL references
+    // Replace `http://localhost:5000/api/ with ${config.API_URL}/api/
     if (newData.includes('http://localhost:5000')) {
-      newData = newData.replace(/['"]http:\/\/localhost:5000\/api\//g, '`${config.API_URL}/api/');
-      newData = newData.replace(/http:\/\/localhost:5000\$\{/g, '${config.API_URL}${');
+      // API URL in template strings
+      newData = newData.replace(/`http:\/\/localhost:5000\/api\//g, '`${config.API_URL}/api/');
       
-      // Fix string closing - replace " with ` where needed
-      newData = newData.replace(/\$\{config\.API_URL\}\/api\/([^`]*?)"/g, '${config.API_URL}/api/$1`');
+      // Fix string closing for template literals
+      newData = newData.replace(/`\${config\.API_URL}\/api\/([^`]*?)"/g, '`${config.API_URL}/api/$1`');
       
-      // Fix specific cases for img src attributes
-      newData = newData.replace(/['"]http:\/\/localhost:5000(.*?)['"](?=[,\s])/g, '`${config.API_URL}$1`');
+      // API URL in axios.get/post/put/delete calls
+      newData = newData.replace(/axios\.(get|post|put|delete|patch)\(`http:\/\/localhost:5000\/api\//g, 'axios.$1(`${config.API_URL}/api/');
+      
+      // URLs in img src attributes
+      newData = newData.replace(/src={`http:\/\/localhost:5000/g, 'src={`${config.API_URL}');
       
       // For action properties
       newData = newData.replace(/action: ['"]http:\/\/localhost:5000\/api\/uploads['"],/g, 'action: `${config.API_URL}/api/uploads`,');
+      
+      // For any other hardcoded URLs
+      newData = newData.replace(/['"]http:\/\/localhost:5000\/api\//g, '`${config.API_URL}/api/');
+      
+      // For const url = http://localhost:5000/api/... cases
+      newData = newData.replace(/const url = `http:\/\/localhost:5000\/api\//g, 'const url = `${config.API_URL}/api/');
       
       modified = true;
     }

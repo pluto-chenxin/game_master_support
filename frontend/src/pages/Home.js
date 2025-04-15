@@ -66,7 +66,7 @@ const Home = () => {
       
       // Fetch games for statistics with workspace filter
       console.log(`[Dashboard] Fetching games for workspace ${workspaceId}`);
-      const gamesResponse = await axios.get(`http://localhost:5000/api/games?workspaceId=${workspaceId}&_=${timestamp}`);
+      const gamesResponse = await axios.get(`${config.API_URL}/api/games?workspaceId=${workspaceId}&_=${timestamp}`);
       const games = gamesResponse.data;
       console.log(`[Dashboard] Received ${games.length} games`);
       
@@ -95,13 +95,13 @@ const Home = () => {
       
       // Fetch total hint count with workspace filter
       console.log(`[Dashboard] Fetching hints for workspace ${workspaceId}`);
-      const hintsCountResponse = await axios.get(`http://localhost:5000/api/hints?workspaceId=${workspaceId}&_=${timestamp}`);
+      const hintsCountResponse = await axios.get(`${config.API_URL}/api/hints?workspaceId=${workspaceId}&_=${timestamp}`);
       const hintsCount = hintsCountResponse.data.length;
       console.log(`[Dashboard] Received ${hintsCount} hints`);
       
       // Fetch maintenance count with workspace filter
       console.log(`[Dashboard] Fetching maintenance for workspace ${workspaceId}`);
-      const maintenanceCountResponse = await axios.get(`http://localhost:5000/api/maintenance?workspaceId=${workspaceId}&_=${timestamp}`);
+      const maintenanceCountResponse = await axios.get(`${config.API_URL}/api/maintenance?workspaceId=${workspaceId}&_=${timestamp}`);
       const maintenanceCount = maintenanceCountResponse.data.length;
       console.log(`[Dashboard] Received ${maintenanceCount} maintenance records`);
       

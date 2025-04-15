@@ -22,7 +22,7 @@ const AddPuzzle = () => {
     const fetchGame = async () => {
       try {
         setGameLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/games/${gameId}`);
+        const response = await axios.get(`${config.API_URL}/api/games/${gameId}`);
         setGame(response.data);
         setGameLoading(false);
       } catch (error) {

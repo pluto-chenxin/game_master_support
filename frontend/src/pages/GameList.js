@@ -35,7 +35,7 @@ const GameList = () => {
         params.append('workspaceId', currentWorkspace.id);
       }
       
-      const url = `http://localhost:5000/api/games${params.toString() ? `?${params.toString()}` : ''}`;
+      const url = `${config.API_URL}/api/games${params.toString() ? `?${params.toString()}` : ''}`;
       const response = await axios.get(url);
       setGames(response.data);
       setLoading(false);
@@ -48,7 +48,7 @@ const GameList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/games/${id}`);
+      await axios.delete(`${config.API_URL}/api/games/${id}`);
       message.success('Game deleted successfully');
       fetchGames();
     } catch (error) {

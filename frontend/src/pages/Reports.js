@@ -80,7 +80,7 @@ const Reports = () => {
         params.append('workspaceId', currentWorkspace.id);
       }
       
-      const url = `http://localhost:5000/api/games${params.toString() ? `?${params.toString()}` : ''}`;
+      const url = `${config.API_URL}/api/games${params.toString() ? `?${params.toString()}` : ''}`;
       const response = await axios.get(url);
       setGames(response.data);
       setLoading(false);
@@ -93,7 +93,7 @@ const Reports = () => {
 
   const fetchPuzzles = async (gameId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/games/${gameId}/puzzles`);
+      const response = await axios.get(`${config.API_URL}/api/games/${gameId}/puzzles`);
       setPuzzles(response.data);
     } catch (err) {
       console.error('Error fetching puzzles:', err);

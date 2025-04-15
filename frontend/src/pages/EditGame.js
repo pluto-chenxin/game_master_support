@@ -35,7 +35,7 @@ const EditGame = () => {
     const fetchGame = async () => {
       try {
         setGameLoading(true);
-        const response = await axios.get(`http://localhost:5000/api/games/${id}`);
+        const response = await axios.get(`${config.API_URL}/api/games/${id}`);
         setGame(response.data);
         
         // Format dates for form fields
@@ -71,7 +71,7 @@ const EditGame = () => {
       };
 
       // Update the game
-      await axios.put(`http://localhost:5000/api/games/${id}`, formattedValues);
+      await axios.put(`${config.API_URL}/api/games/${id}`, formattedValues);
       
       message.success('Game updated successfully!');
       navigate(`/games/${id}`);
