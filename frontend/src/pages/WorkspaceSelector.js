@@ -7,7 +7,7 @@ import {
   PlusOutlined, SelectOutlined, AppstoreOutlined, 
   TeamOutlined, SettingOutlined, EditOutlined 
 } from '@ant-design/icons';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -20,18 +20,26 @@ const WorkspaceSelector = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  // Redirect if not authenticated
-  if (!isAuthenticated()) {
-    return <Navigate to="/login" />;
-  }
-
-  // Redirect to home if there's only one workspace and it's already selected
+  // Use effect for both authentication check and workspace redirect
   useEffect(() => {
+    // Check authentication
+    if (!isAuthenticated()) {
+      setShouldRedirect(true);
+      return;
+    }
+    
+    // Check if we should redirect to home
     if (workspaces.length === 1 && currentWorkspace && currentWorkspace.id === workspaces[0].id) {
       navigate('/');
     }
-  }, [workspaces, currentWorkspace, navigate]);
+  }, [workspaces, currentWorkspace, navigate, isAuthenticated]);
+
+  // Handle redirect if not authenticated
+  if (shouldRedirect) {
+    return <Navigate to="/login" />;
+  }
 
   const handleCreateWorkspace = async (values) => {
     try {
@@ -55,8 +63,6 @@ const WorkspaceSelector = () => {
     switchWorkspace(workspace);
     
     // Force a page reload to refresh all data for the new workspace
-    // Alternatively, we could use a more targeted approach with useContext and useReducer
-    // to notify components to refresh their data
     window.location.href = '/games';
   };
 
@@ -76,7 +82,7 @@ const WorkspaceSelector = () => {
           <Text>Select a workspace to continue or create a new one</Text>
         </div>
 
-        <Card bordered={false} style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)' }}>
+        <Card>
           {loading ? (
             <div style={{ textAlign: 'center', padding: '40px' }}>
               <Spin size="large" />
@@ -156,9 +162,9 @@ const WorkspaceSelector = () => {
         </Card>
       </div>
 
-      <Modal
-        title="Create New Workspace"
-        open={isModalVisible}
+      <Modal 
+        title="Create New Workspace" 
+        visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
@@ -170,28 +176,26 @@ const WorkspaceSelector = () => {
           <Form.Item
             name="name"
             label="Workspace Name"
-            rules={[
-              {
-                required: true,
-                message: 'Please input workspace name!',
-              },
-            ]}
+            rules={[{ required: true, message: 'Please enter workspace name' }]}
           >
-            <Input prefix={<AppstoreOutlined />} placeholder="Workspace Name" />
+            <Input placeholder="Enter workspace name" />
           </Form.Item>
-
           <Form.Item
             name="description"
             label="Description"
           >
             <TextArea 
-              placeholder="Description (optional)"
-              autoSize={{ minRows: 3, maxRows: 6 }}
+              placeholder="Enter workspace description (optional)" 
+              rows={4}
             />
           </Form.Item>
-
-          <Form.Item style={{ marginBottom: 0 }}>
-            <Button type="primary" htmlType="submit" loading={loading} block>
+          <Form.Item>
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              loading={loading}
+              block
+            >
               Create Workspace
             </Button>
           </Form.Item>

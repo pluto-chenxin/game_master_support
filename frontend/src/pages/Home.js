@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Row, Col, Card, Statistic, Table, Typography, Spin, Alert, Button } from 'antd';
 import { AppstoreOutlined, BlockOutlined, BulbOutlined, ToolOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -20,8 +20,8 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [debugInfo, setDebugInfo] = useState(null);
 
-  // Function to fetch dashboard data
-  const fetchData = async () => {
+  // Function to fetch dashboard data - wrapped in useCallback
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -118,14 +118,14 @@ const Home = () => {
       setError(error.response?.data?.error || 'Failed to load dashboard data. Please try again later.');
       setLoading(false);
     }
-  };
+  }, [initialized, currentWorkspace, user]); // Include dependencies here
 
   // Effect to fetch data when auth and workspace are ready
   useEffect(() => {
     if (initialized) {
       fetchData();
     }
-  }, [initialized, currentWorkspace?.id]);
+  }, [initialized, fetchData]); // Include fetchData in dependencies
 
   const columns = [
     {

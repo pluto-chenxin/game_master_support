@@ -1,0 +1,166 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Change from PostgreSQL to SQLite for easier setup
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                   @id @default(autoincrement())
+  email             String                @unique
+  password          String
+  name              String?
+  role              String                @default("USER")
+  workspaces        UserWorkspace[]
+  sentInvitations   WorkspaceInvitation[] @relation("InvitedBy")
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+}
+
+// Using constants instead of enum
+// USER roles: "SUPER_ADMIN", "ADMIN", "USER"
+
+model Workspace {
+  id           Int                   @id @default(autoincrement())
+  name         String
+  description  String?
+  users        UserWorkspace[]
+  games        Game[]
+  invitations  WorkspaceInvitation[]
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+}
+
+model UserWorkspace {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+  role        String    // Using string instead of enum: "SUPER_ADMIN", "ADMIN", "USER"
+
+  @@id([userId, workspaceId])
+}
+
+// Workspace invitation model
+model WorkspaceInvitation {
+  id          Int       @id @default(autoincrement())
+  email       String
+  role        String    // The role to assign upon acceptance
+  token       String    @unique
+  expiresAt   DateTime
+  used        Boolean   @default(false)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+  invitedBy   User      @relation("InvitedBy", fields: [inviterId], references: [id])
+  inviterId   Int
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId])
+  @@index([inviterId])
+}
+
+model Game {
+  id            Int       @id @default(autoincrement())
+  name          String
+  genre         String    // Changed from platform to genre for escape room categories
+  releaseDate   DateTime?
+  purchaseDate  DateTime?
+  description   String?
+  imageUrl      String?
+  puzzles       Puzzle[]
+  reports       Report[]  // New relation to reports
+  workspace     Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId   Int       @default(1)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Puzzle {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String?
+  imageUrl     String?       // Keep for backward compatibility
+  status       String        @default("pending") // pending/in-progress/completed/maintenance
+  difficulty   Int?          @default(1) // 1-5 scale
+  game         Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId       Int
+  hints        Hint[]
+  maintenance  Maintenance[]
+  images       PuzzleImage[] // New relation to PuzzleImage model
+  reports      Report[]      // New relation to reports
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model PuzzleImage {
+  id          Int      @id @default(autoincrement())
+  imageUrl    String
+  caption     String?
+  isPrimary   Boolean  @default(false)
+  puzzle      Puzzle   @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  puzzleId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Hint {
+  id          Int      @id @default(autoincrement())
+  content     String
+  isPremium   Boolean  @default(false)
+  isUsed      Boolean  @default(false)
+  puzzle      Puzzle   @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  puzzleId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Maintenance {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      String   @default("planned") // planned/in-progress/completed
+  fixDate     DateTime
+  puzzle      Puzzle   @relation(fields: [puzzleId], references: [id], onDelete: Cascade)
+  puzzleId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Report {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  reportDate   DateTime      @default(now())
+  status       String        @default("open")  // open/in-progress/resolved
+  resolution   String?       // Optional resolution notes
+  resolvedAt   DateTime?
+  priority     String        @default("high")  // low/medium/high
+  
+  // Relations
+  game         Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId       Int
+  puzzle       Puzzle?       @relation(fields: [puzzleId], references: [id], onDelete: SetNull)
+  puzzleId     Int?          // Optional - a report can be for a game without a specific puzzle
+  images       ReportImage[] // Relation to report images
+  
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([gameId])
+  @@index([puzzleId])
+}
+
+model ReportImage {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String   // Path to the uploaded image
+  report    Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  reportId  Int
+  createdAt DateTime @default(now())
+
+  @@index([reportId])
+} 

@@ -1,0 +1,58 @@
+service: game-master-api
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-west-2
+  environment:
+    DATABASE_URL: \
+    JWT_SECRET: \
+    S3_BUCKET: game-master-uploads20463
+    NODE_ENV: production
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: arn:aws:s3:::game-master-uploads20463/*
+
+package:
+  individually: true
+  patterns:
+    - '!node_modules/.prisma/**'
+    - '!node_modules/.cache/**'
+    - '!node_modules/@prisma/engines/**'
+    - '!node_modules/.bin/**'
+    - '!prisma/migrations/**'
+    - '!uploads/**'
+    - '!tests/**'
+    - '!coverage/**'
+    - '!.git/**'
+    - '!.vscode/**'
+    - '!*.log'
+
+functions:
+  api:
+    handler: lambda.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+    package:
+      patterns:
+        - 'lambda.js'
+        - 'src/**'
+        - 'prisma/schema.prisma'
+        - 'node_modules/@prisma/client/**'
+        - 'node_modules/.prisma/client/**'
+
+plugins:
+  - serverless-prune-plugin
+
+custom:
+  prune:
+    automatic: true
+    includeLayers: true
+    number: 3

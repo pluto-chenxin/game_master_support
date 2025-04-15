@@ -1,0 +1,10 @@
+node_modules/**
+prisma/migrations/**
+uploads/**
+tests/**
+*.test.js
+coverage/**
+.vscode/**
+.git/**
+.env
+package-lock.json
