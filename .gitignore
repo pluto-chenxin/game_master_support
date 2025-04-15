@@ -1,69 +1,41 @@
 # Node
 node_modules/
-frontend/node_modules/
-backend/node_modules/
+*/node_modules/
 
-# Environment
-.env
-.env.local
-backend/.env
-
-# Build
-dist/
+# Build files
 build/
+dist/
 .next/
 .cache/
-
-# Logs
-*.log
-logs/
-
-# Editor
-.vscode/
-.idea/
-
-# System
-.DS_Store
-Thumbs.db
-
-# Uploads
-/uploads/
-frontend/public/uploads/
-
-# Prisma
-/prisma/migrations/
-# Node
-node_modules/
-
-# Build
-/build
-/dist
-/.next
-.cache/
+*/.cache/
 
 # Serverless
 .serverless/
-*.zip
+*/.serverless/
 
-# Local env
-.env
-.env.local
-.env.development
-.env.production
+# Package files
+*.zip
+*.tar.gz
 
 # Logs
+logs/
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Uploads (local only)
-/uploads/
-/backend/uploads/
+# Environment files
+.env*
+!.env.example
 
-# Elastic Beanstalk
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+# Local uploads (use S3 in production)
+uploads/
+backend/uploads/
 
-# System
+# OS files
 .DS_Store
 Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
