@@ -6,11 +6,7 @@ import axios from 'axios';
 import config from './config';
 
 // Set default base URL for API requests
-// If URL is already HTTPS, use it, otherwise force HTTPS
 let baseUrl = config.API_URL;
-if (baseUrl.startsWith('http:') && window.location.protocol === 'https:') {
-  baseUrl = baseUrl.replace('http:', 'https:');
-}
 
 // Ensure no trailing slash to prevent double slashes
 if (baseUrl.endsWith('/')) {

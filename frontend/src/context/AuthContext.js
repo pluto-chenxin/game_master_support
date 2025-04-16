@@ -71,6 +71,13 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       setLoading(true);
+      console.log('Starting registration attempt...');
+      console.log('API URL being used:', axios.defaults.baseURL);
+      
+      // For debugging, log the full URL being requested
+      const fullUrl = axios.defaults.baseURL + '/api/auth/register';
+      console.log('Full registration URL:', fullUrl);
+      
       const res = await axios.post('/api/auth/register', formData);
       
       // Store token and set axios header
@@ -91,6 +98,7 @@ export const AuthProvider = ({ children }) => {
       message.success('Registration successful!');
       return true;
     } catch (err) {
+      console.error('Registration error details:', err);
       setLoading(false);
       message.error(err.response?.data?.error || 'Registration failed');
       return false;
