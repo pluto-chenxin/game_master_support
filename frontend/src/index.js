@@ -16,7 +16,7 @@ if (baseUrl.endsWith('/')) {
 axios.defaults.baseURL = baseUrl;
 
 // Log the base URL being used
-console.log('API Base URL:', axios.defaults.baseURL);
+console.log('API Base URL set to:', axios.defaults.baseURL);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
