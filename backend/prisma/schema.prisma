@@ -5,9 +5,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Change from PostgreSQL to SQLite for easier setup
+// Using PostgreSQL for both development and production
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
